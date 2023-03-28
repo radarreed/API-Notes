@@ -1,0 +1,35 @@
+Python script to pull Paylocity Data
+
+import requests
+from requests_oauthlib import OAuth2Session
+import urllib
+
+import requests
+
+# Set up the authentication parameters
+client_id = 'xxx'
+client_secret = 'xxx'
+
+access_token_url = 'https://api.paylocity.com/IdentityServer/connect/token'
+scope = 'WebLinkAPI'
+
+# Request an access token
+payload = {
+    'client_id': client_id,
+    'client_secret': client_secret,
+    'grant_type': 'client_credentials',
+    'scope': 'WebLinkAPI'
+}
+response = requests.post(access_token_url, data=payload)
+
+# Get the access token from the response
+access_token = response.json()['access_token']
+
+# Use the access token to make API requests
+headers = {'Authorization': f'Bearer {access_token}'}
+api_url = 'https://api.paylocity.com/api/v2/companies/{Company#}/employees'
+response = requests.get(api_url, headers=headers)
+print(response.json())
+
+#Get Url encoded request for troubleshooting purposes
+print(response.request.__dict__)
